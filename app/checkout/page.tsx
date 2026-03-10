@@ -41,6 +41,8 @@ const plans = {
     period: "/ mês",
     description: "Para barbearias iniciantes",
     popular: false,
+    // FOCO: Você pode alterar o link da imagem abaixo por qualquer outro de sua escolha
+    image: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070&auto=format&fit=crop",
     features: [
       "Site profissional",
       "Gestão de barbeiros",
@@ -58,8 +60,15 @@ const plans = {
     period: "/ mês",
     description: "Para barbearias em crescimento",
     popular: true,
+    // FOCO: Você pode alterar o link da imagem abaixo por qualquer outro de sua escolha
+    image: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074&auto=format&fit=crop",
     features: [
-      "Tudo do plano anterior, mais:",
+      "Site profissional",
+      "Gestão de barbeiros",
+      "Serviços",
+      "Combos e planos",
+      "Produtos",
+      "Configurações",
       "Landing page profissional",
       "Agenda completa",
       "Relatórios",
@@ -77,8 +86,22 @@ const plans = {
     period: "/ mês",
     description: "Para redes de barbearias",
     popular: false,
+    // FOCO: Você pode alterar o link da imagem abaixo por qualquer outro de sua escolha
+    image: "https://images.unsplash.com/photo-1621605815841-db897fb4f07e?q=80&w=2070&auto=format&fit=crop",
     features: [
-      "Tudo do plano anterior, mais:",
+      "Site profissional",
+      "Gestão de barbeiros",
+      "Serviços",
+      "Combos e planos",
+      "Produtos",
+      "Configurações",
+      "Landing page profissional",
+      "Agenda completa",
+      "Relatórios",
+      "Financeiro",
+      "CRM de clientes",
+      "Permissões avançadas",
+      "Gestão completa da barbearia",
       "Gestão de múltiplas barbearias",
       "Controle de franquias",
       "Dashboard centralizado",
@@ -98,7 +121,6 @@ function CheckoutContent() {
     email: "",
     phone: "",
     cpf: "",
-    barbershopName: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [mpReady, setMpReady] = useState(false)
@@ -162,13 +184,12 @@ function CheckoutContent() {
     formData.name.trim().length > 0 &&
     isEmailValid &&
     isPhoneValid &&
-    isCPFValid &&
-    formData.barbershopName.trim().length > 0
+    isCPFValid
 
   useEffect(() => {
     console.log("[v0] Checkout state check:", { mpReady, isFormValid, hasController: !!paymentBrickController, hasResult: !!paymentResult })
 
-    if (mpReady && isFormValid && !paymentBrickController && !paymentResult) {
+    if (mpReady && !paymentBrickController && !paymentResult) {
       const renderPaymentBrick = async () => {
         try {
           console.log("[v0] Iniciando renderização do Payment Brick...")
@@ -194,6 +215,19 @@ function CheckoutContent() {
               visual: {
                 style: {
                   theme: "dark",
+                  customVariables: {
+                    baseColor: "#eab308",
+                    buttonBackgroundColor: "#eab308",
+                    buttonTextColor: "#000000",
+                    formBackgroundColor: "transparent",
+                    formControlBackgroundColor: "transparent",
+                    formControlInputBackgroundColor: "#18181b",
+                    formControlBorderColor: "#27272a",
+                    formControlFocusedBorderColor: "#eab308",
+                    outlinePrimaryColor: "#eab308",
+                    fontSizeExtraSmall: "10px",
+                    fontSizeSmall: "12px",
+                  }
                 },
               },
             },
@@ -263,8 +297,16 @@ function CheckoutContent() {
       }
 
       renderPaymentBrick()
+    } else if (paymentBrickController && plan) {
+      // Atualiza o valor se o plano mudar
+      console.log("[v0] Atualizando valor do Brick para:", plan.price)
+      paymentBrickController.update({
+        initialization: {
+          amount: plan.price,
+        },
+      })
     }
-  }, [mpReady, isFormValid, plan, paymentBrickController, paymentResult])
+  }, [mpReady, plan, paymentBrickController, paymentResult])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -323,118 +365,176 @@ function CheckoutContent() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mercado Pago SDK */}
+      {/* Mercado Pago SDK - Otimizado para After Interactive */}
       <Script
         src="https://sdk.mercadopago.com/js/v2"
+        strategy="afterInteractive"
         onLoad={() => setMpReady(true)}
       />
 
-      {/* Minimal Navbar */}
-      <header className="border-b border-border bg-card/50">
+      {/* Rastreamento (Pixel/GTM) - Cole seus IDs abaixo */}
+      {/* 
+        <Script id="facebook-pixel" strategy="afterInteractive">
+          {`!function(f,b,e,v,n,t,s){...}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', 'SEU_PIXEL_ID'); fbq('track', 'PageView');`}
+        </Script>
+      */}
+
+      {/* Layout Minimalista (Foca na Conversão) */}
+      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2 text-foreground">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <Scissors className="w-5 h-5 text-primary-foreground" />
+          <div className="flex items-center justify-between h-16 sm:h-20">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                <Scissors className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="font-semibold text-lg">Easy Barbearia</span>
-            </Link>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Lock className="w-4 h-4" />
-              <span>Pagamento Seguro</span>
+              <span className="font-black text-xl tracking-tight text-foreground">Easy Barbearia</span>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-12">
-        {/* Back Button */}
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-16 max-w-4xl">
+        {/* Botão Voltar Otimizado */}
         <Link
           href="/#precos"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm text-muted-foreground hover:text-foreground mb-6 sm:mb-8 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-accent mb-12 transition-all group"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Voltar para planos
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          Voltar para a página inicial
         </Link>
 
-        {/* Checkout Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-4xl font-bold text-foreground mb-2 sm:mb-3">
-            Finalize sua assinatura
-          </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
-            Você está a poucos passos de profissionalizar sua barbearia.
-          </p>
-        </div>
+        {/* PASSO 1: Escolha do Produto */}
+        <section className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">1</div>
+            <h2 className="text-xl font-black text-foreground uppercase tracking-tight">Escolha seu Plano</h2>
+          </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
-          {/* Left Column - Plan Selection & Form */}
-          <div className="space-y-6 sm:space-y-10 order-2 lg:order-1">
-            {/* Plan Selector */}
-            <div className="bg-card/30 p-4 sm:p-0 rounded-2xl sm:bg-transparent border border-border sm:border-0">
-              <h2 className="text-lg font-semibold text-foreground mb-4">Escolha seu plano</h2>
-              <div className="space-y-3">
-                {(Object.keys(plans) as PlanKey[]).map((key) => {
-                  const p = plans[key]
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => setSelectedPlan(key)}
-                      className={`w-full p-3.5 sm:p-4 rounded-xl border text-left transition-all ${selectedPlan === key
-                        ? "border-accent bg-accent/10"
-                        : "border-border bg-card/50 hover:border-border/80"
-                        }`}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2.5 sm:gap-3 shrink min-w-0">
-                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${selectedPlan === key ? "border-accent" : "border-muted-foreground"
-                            }`}>
-                            {selectedPlan === key && (
-                              <div className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-accent" />
-                            )}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-medium text-foreground text-sm sm:text-base truncate">{p.name}</span>
-                              {p.popular && (
-                                <Badge className="bg-accent text-accent-foreground text-[10px] sm:text-xs px-1.5 py-0">
-                                  Popular
-                                </Badge>
-                              )}
-                            </div>
-                            <p className="text-xs sm:text-sm text-muted-foreground truncate">{p.description}</p>
-                          </div>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-foreground text-sm sm:text-base">R$ {p.price}</span>
-                            <span className="text-muted-foreground text-[10px] sm:text-xs">/mês</span>
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {(Object.keys(plans) as PlanKey[]).map((key) => {
+              const p = plans[key]
+              const isSelected = selectedPlan === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedPlan(key)}
+                  className={`p-6 rounded-2xl border text-left transition-all relative group/card ${isSelected
+                    ? "border-accent bg-accent/5 ring-1 ring-accent/30 shadow-lg shadow-accent/5"
+                    : "border-border bg-card hover:border-border/80"
+                    }`}
+                >
+                  {isSelected && (
+                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-accent rounded-full flex items-center justify-center shadow-md animate-in zoom-in duration-300">
+                      <Check className="w-3.5 h-3.5 text-accent-foreground" />
+                    </div>
+                  )}
+                  <div className="mb-4">
+                    <h4 className={`font-black uppercase tracking-wider text-[10px] mb-1 ${isSelected ? 'text-accent' : 'text-muted-foreground'}`}>
+                      {p.id === 'gestao' ? 'Mais Popular' : 'Assinatura'}
+                    </h4>
+                    <h3 className="font-bold text-foreground text-lg leading-tight">{p.name}</h3>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-black text-foreground font-mono">R${p.price}</span>
+                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">/mês</span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* PASSO 2: Banner Visual */}
+        <section className="mb-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">2</div>
+            <h2 className="text-xl font-black text-foreground uppercase tracking-tight">Visualização do Produto</h2>
+          </div>
+
+          <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-2xl min-h-[220px] sm:min-h-[280px]">
+            <div className="absolute inset-0 z-0">
+              {plan.image && (
+                <img
+                  src={plan.image}
+                  alt={plan.name}
+                  // @ts-ignore
+                  fetchpriority="high"
+                  className="w-full h-full object-cover opacity-60"
+                  loading="eager"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent z-10" />
             </div>
 
-            {/* Form */}
-            <div className="bg-card/30 p-5 sm:p-0 rounded-2xl sm:bg-transparent border border-border sm:border-0">
-              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
-                <h2 className="text-lg font-semibold text-foreground mb-1">Seus dados</h2>
-                <p className="text-xs sm:text-sm text-muted-foreground mb-4">Preencha com seus dados reais para emissão da nota fiscal.</p>
+            <div className="relative z-20 p-8 sm:p-12 flex flex-col justify-end h-full min-h-[220px] sm:min-h-[280px]">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+                <div>
+                  <Badge className="bg-accent text-accent-foreground mb-4 font-bold uppercase tracking-widest text-[10px]">
+                    {plan.name}
+                  </Badge>
+                  <h2 className="text-3xl sm:text-5xl font-black text-foreground tracking-tighter leading-none mb-4">
+                    {plan.name}
+                  </h2>
+                  <p className="text-lg text-muted-foreground font-medium max-w-xl">
+                    {plan.description}
+                  </p>
+                </div>
+                <div className="flex items-baseline gap-2 shrink-0">
+                  <span className="text-5xl font-black text-foreground">R$ {plan.price}</span>
+                  <span className="text-sm text-muted-foreground font-bold">/mês</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                {error && (
-                  <div className="p-3.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs sm:text-sm">
-                    {error}
+        {/* PASSO 3: Recursos Inclusos */}
+        <section className="mb-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">3</div>
+            <h2 className="text-xl font-black text-foreground uppercase tracking-tight">O que você está levando</h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {plan.features.map((feature, index) => (
+              <div key={index} className="flex items-center gap-4 p-5 rounded-2xl bg-card border border-border/50 hover:border-accent/30 transition-colors shadow-sm">
+                <div className="w-8 h-8 rounded-xl bg-accent/10 flex items-center justify-center shrink-0 border border-accent/20">
+                  <Check className="w-4 h-4 text-accent" />
+                </div>
+                <span className="text-sm font-bold text-foreground leading-tight">{feature}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* PASSO 4: Pagamento */}
+        <section className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">4</div>
+            <h2 className="text-xl font-black text-foreground uppercase tracking-tight">Finalizar Assinatura</h2>
+          </div>
+
+          <div className="bg-card/50 p-6 sm:p-12 rounded-[2rem] border border-divider shadow-2xl relative overflow-hidden backdrop-blur-md">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -mr-32 -mt-32" />
+
+            <form onSubmit={handleSubmit} className="relative z-10 space-y-10">
+              <div className="grid md:grid-cols-2 gap-10">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-black text-foreground mb-1 uppercase tracking-tight">Dados do Assinante</h3>
+                    <p className="text-xs text-muted-foreground mb-6">Informações para acesso e faturamento.</p>
                   </div>
-                )}
 
-                <div className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
+                  {error && (
+                    <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold animate-shake">
+                      {error}
+                    </div>
+                  )}
+
+                  <div className="space-y-4">
                     <div className="space-y-1.5">
-                      <label htmlFor="name" className="text-xs sm:text-sm font-medium text-foreground">
-                        Nome completo
+                      <label htmlFor="name" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">
+                        Nome Completo
                       </label>
                       <input
                         type="text"
@@ -442,14 +542,14 @@ function CheckoutContent() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full h-11 px-4 rounded-lg bg-input border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                        placeholder="Seu nome"
+                        className="w-full h-14 px-5 rounded-xl bg-input border border-border text-foreground text-sm font-bold placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all shadow-inner"
+                        placeholder="Nome e Sobrenome"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label htmlFor="email" className="text-xs sm:text-sm font-medium text-foreground">
-                        E-mail
+                      <label htmlFor="email" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">
+                        E-mail Principal
                       </label>
                       <input
                         type="email"
@@ -457,249 +557,159 @@ function CheckoutContent() {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full h-11 px-4 rounded-lg bg-input border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                        placeholder="seu@email.com"
+                        className="w-full h-14 px-5 rounded-xl bg-input border border-border text-foreground text-sm font-bold placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all shadow-inner"
+                        placeholder="seu@contato.com"
                       />
                     </div>
-                  </div>
 
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label htmlFor="phone" className="text-xs sm:text-sm font-medium text-foreground">
-                        WhatsApp
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        required
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
-                        className={`w-full h-11 px-4 rounded-lg bg-input border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all ${formData.phone && !isPhoneValid ? "border-red-500 focus:ring-red-500" : "border-border"
-                          }`}
-                        placeholder="(00) 00000-0000"
-                        maxLength={15}
-                      />
-                      {formData.phone && !isPhoneValid && (
-                        <p className="text-[10px] text-red-500 mt-0.5">Mínimo 10 dígitos</p>
-                      )}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label htmlFor="phone" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">
+                          WhatsApp
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          required
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
+                          className={`w-full h-14 px-5 rounded-xl bg-input border text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all shadow-inner ${formData.phone && !isPhoneValid ? "border-red-500 focus:ring-red-500" : "border-border"
+                            }`}
+                          placeholder="(00) 00000-0000"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label htmlFor="cpf" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">
+                          CPF/CNPJ
+                        </label>
+                        <input
+                          type="text"
+                          id="cpf"
+                          required
+                          value={formData.cpf}
+                          onChange={(e) => setFormData({ ...formData, cpf: formatCPF(e.target.value) })}
+                          className={`w-full h-14 px-5 rounded-xl bg-input border text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all shadow-inner ${formData.cpf && !isCPFValid ? "border-red-500 focus:ring-red-500" : "border-border"
+                            }`}
+                          placeholder="000.000.000-00"
+                        />
+                      </div>
                     </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="cpf" className="text-xs sm:text-sm font-medium text-foreground">
-                        CPF
-                      </label>
-                      <input
-                        type="text"
-                        id="cpf"
-                        required
-                        value={formData.cpf}
-                        onChange={(e) => setFormData({ ...formData, cpf: formatCPF(e.target.value) })}
-                        className={`w-full h-11 px-4 rounded-lg bg-input border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all ${formData.cpf && !isCPFValid ? "border-red-500 focus:ring-red-500" : "border-border"
-                          }`}
-                        placeholder="000.000.000-00"
-                        maxLength={14}
-                      />
-                      {formData.cpf && !isCPFValid && (
-                        <p className="text-[10px] text-red-500 mt-0.5">CPF inválido</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label htmlFor="barbershopName" className="text-xs sm:text-sm font-medium text-foreground">
-                      Nome da sua barbearia
-                    </label>
-                    <input
-                      type="text"
-                      id="barbershopName"
-                      required
-                      value={formData.barbershopName}
-                      onChange={(e) => setFormData({ ...formData, barbershopName: e.target.value })}
-                      className="w-full h-11 px-4 rounded-lg bg-input border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent transition-all"
-                      placeholder="Barbearia Premium"
-                    />
                   </div>
                 </div>
 
-                {/* Payment Section */}
-                <div className="space-y-6 pt-4">
-                  {!isFormValid ? (
-                    <div className="p-6 rounded-xl border border-dashed border-border bg-card/30 text-center">
-                      <p className="text-xs sm:text-sm text-muted-foreground">
-                        Preencha seus dados para habilitar o pagamento.
-                      </p>
-                      {/* Debug validation state */}
-                      <div className="hidden">
-                        {JSON.stringify({ isEmailValid, isPhoneValid, isCPFValid })}
-                      </div>
-                    </div>
-                  ) : paymentResult ? (
-                    <div className="p-5 sm:p-6 rounded-xl border border-accent bg-accent/5 mt-12 sm:mt-20 animate-in fade-in slide-in-from-bottom-8 duration-500">
-                      <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                        <Check className="w-5 h-5 text-accent" />
-                        <span className="pt-[5px] leading-none">
-                          {paymentResult.status === "approved" ? "Assinatura Confirmada!" : "Pagamento em Processamento"}
-                        </span>
-                      </h3>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-black text-foreground mb-1 uppercase tracking-tight">Forma de Pagamento</h3>
+                    <p className="text-xs text-muted-foreground mb-6">Escolha como prefere pagar sua assinatura.</p>
+                  </div>
 
-                      {paymentResult.point_of_interaction?.transaction_data?.qr_code_base64 && (
-                        <div className="space-y-4 text-center">
-                          <p className="text-xs sm:text-sm text-muted-foreground">Escaneie o QR Code para pagar via Pix:</p>
-                          <div className="bg-white p-3 rounded-lg inline-block text-center flex justify-center mx-auto">
-                            <img
-                              src={`data:image/png;base64,${paymentResult.point_of_interaction.transaction_data.qr_code_base64}`}
-                              alt="QR Code Pix"
-                              className="w-40 h-40 sm:w-48 sm:h-48"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <p className="text-[10px] sm:text-xs text-muted-foreground">Ou copie o código abaixo:</p>
-                            <textarea
-                              readOnly
-                              className="w-full text-[10px] sm:text-xs p-2 bg-muted rounded border border-border resize-none h-16 sm:h-20"
-                              value={paymentResult.point_of_interaction.transaction_data.qr_code}
-                            />
+                  <div className="min-h-[350px]">
+                    {!mpReady ? (
+                      <div className="flex flex-col items-center justify-center p-16 space-y-4 border border-border/50 rounded-2xl bg-card/30">
+                        <Loader2 className="w-12 h-12 animate-spin text-accent" />
+                        <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Criptografando...</p>
+                      </div>
+                    ) : paymentResult ? (
+                      <div className="p-8 rounded-2xl border-2 border-accent bg-accent/5 animate-in zoom-in duration-500 text-center">
+                        <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-accent/20">
+                          <Check className="w-8 h-8 text-accent-foreground" />
+                        </div>
+                        <h3 className="text-xl font-black text-foreground mb-2">
+                          {paymentResult.status === "approved" ? "Assinatura Ativada!" : "Aguardando Pagamento"}
+                        </h3>
+
+                        {paymentResult.point_of_interaction?.transaction_data?.qr_code_base64 && (
+                          <div className="mt-8 space-y-6">
+                            <div className="bg-white p-4 rounded-2xl inline-block shadow-xl border-4 border-white">
+                              <img
+                                src={`data:image/png;base64,${paymentResult.point_of_interaction.transaction_data.qr_code_base64}`}
+                                alt="Pix QR Code"
+                                className="w-48 h-48"
+                              />
+                            </div>
                             <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full h-9 text-xs sm:text-sm"
+                              className="w-full bg-accent text-accent-foreground font-black uppercase tracking-widest py-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
                               onClick={() => {
                                 if (paymentResult.point_of_interaction?.transaction_data?.qr_code) {
                                   navigator.clipboard.writeText(paymentResult.point_of_interaction.transaction_data.qr_code)
-                                  alert("Código copiado!")
+                                  alert("Código Copiado!")
                                 }
                               }}
-                              type="button"
                             >
-                              Copiar código Pix
+                              Copiar Código Pix
                             </Button>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      <Link
-                        href={`/checkout/sucesso?payment_id=${paymentResult.id}&plano=${selectedPlan}`}
-                        className="mt-6 block text-center"
-                      >
-                        <Button className="w-full h-11 bg-accent text-accent-foreground">
-                          {paymentResult.status === "approved" ? "Ir para o Painel" : "Verificar Pagamento"}
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : (
-                    <div id="payment-brick-container" className="min-h-[250px]"></div>
-                  )}
-                </div>
-
-                {/* Trust Footer */}
-                <div className="flex flex-col items-center gap-4 pt-6 mt-2 border-t border-border">
-                  <div className="flex flex-col items-center gap-2 mb-2">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold opacity-70">Processado por</p>
-                    <img
-                      src="https://images.seeklogo.com/logo-png/19/2/mercado-pago-logo-png_seeklogo-198430.png"
-                      alt="Mercado Pago"
-                      className="h-16 sm:h-18 object-contain brightness-110 contrast-125"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs sm:text-sm text-green-500 font-medium">
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>Pagamento Seguro</span>
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
-                      <Shield className="w-3.5 h-3.5" />
-                      <span>7 dias de garantia</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs text-muted-foreground">
-                      <Lock className="w-3.5 h-3.5" />
-                      <span>Dados criptografados</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Payment Methods */}
-                <div className="pt-2 text-center">
-                  <p className="text-[10px] text-muted-foreground mb-2">Aceitamos Pix, Crédito e Débito</p>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          {/* Right Column - Order Summary */}
-          <div className="lg:sticky lg:top-8 h-fit order-1 lg:order-2">
-            <div className={`rounded-2xl border p-5 sm:p-8 ${plan.popular ? "border-accent/40 bg-card/60 shadow-xl shadow-accent/5" : "border-border bg-card/40"
-              }`}>
-              {plan.popular && (
-                <Badge className="bg-accent text-accent-foreground mb-4 text-[10px] sm:text-xs">
-                  Recomendado
-                </Badge>
-              )}
-
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="text-xl font-bold text-foreground">{plan.name}</h3>
-                  <p className="text-sm text-muted-foreground">{plan.description}</p>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                  <Star className="w-5 h-5 text-accent" />
-                </div>
-              </div>
-
-              {/* Price */}
-              <div className="py-6 border-b border-border/50">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl sm:text-4xl font-bold text-foreground">R$ {plan.price}</span>
-                  <span className="text-sm text-muted-foreground">{plan.period}</span>
-                </div>
-                {plan.originalPrice && (
-                  <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                    <span className="text-xs sm:text-sm text-muted-foreground line-through opacity-60">R$ {plan.originalPrice}</span>
-                    <Badge variant="outline" className="text-[10px] border-green-500/30 bg-green-500/5 text-green-500 w-fit">
-                      Economize R$ {plan.originalPrice - plan.price}/mês
-                    </Badge>
-                  </div>
-                )}
-              </div>
-
-              {/* Features */}
-              <div className="mt-6">
-                <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">Recursos inclusos:</h4>
-                <ul className="space-y-3">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="mt-0.5 w-4 h-4 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-accent" />
+                        <Link href={`/checkout/sucesso?payment_id=${paymentResult.id}&plano=${selectedPlan}`} className="mt-8 block">
+                          <Button variant="outline" className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground font-bold">
+                            {paymentResult.status === "approved" ? "Acessar Painel" : "Ver Detalhes"}
+                          </Button>
+                        </Link>
                       </div>
-                      <span className="text-sm text-muted-foreground leading-snug">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                    ) : (
+                      <div id="payment-brick-container" className="min-h-[350px] bg-card/20 rounded-2xl p-2 border border-border/50 shadow-inner"></div>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* Satisfaction Guarantee */}
-              <div className="mt-8 p-4 rounded-xl bg-muted/30 border border-border/30">
-                <p className="text-[11px] text-muted-foreground text-center italic">
-                  "Junte-se a centenas de barbeiros que já profissionalizaram sua gestão com a Easy Barbearia."
-                </p>
+              {/* Trust badges footer within the payment form area */}
+              <div className="pt-10 border-t border-border/50 grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
+                    <Shield className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Proteção de Dados</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center text-accent border border-accent/20">
+                    <Star className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">7 Dias Garantidos</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                    <Lock className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Pagamento SSL</span>
+                </div>
+                <div className="flex flex-col items-center gap-2 text-center">
+                  <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
+                    <Check className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Ativação Instantânea</span>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
-        </div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-card/50 mt-12 sm:mt-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-muted-foreground">
-            <p className="text-center sm:text-left order-2 sm:order-1">
+      {/* Footer Focado em Autoridade e Confiança */}
+      <footer className="border-t border-border bg-card/80 py-12 sm:py-20 mt-12 sm:mt-24">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div className="space-y-4 text-center sm:text-left">
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <Scissors className="w-5 h-5 text-accent" />
+                <span className="font-bold text-lg text-foreground">Easy Barbearia</span>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto sm:mx-0">
+                A plataforma #1 para barbeiros que buscam excelência na gestão e atendimento.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-6 text-[10px] sm:text-xs text-muted-foreground font-medium">
+            <p className="text-center sm:text-left">
               © {new Date().getFullYear()} Easy Barbearia. Todos os direitos reservados.
             </p>
-            <div className="flex items-center gap-6 order-1 sm:order-2">
-              <a href="#" className="hover:text-foreground transition-colors">Termos</a>
-              <a href="#" className="hover:text-foreground transition-colors">Privacidade</a>
-              <a href="#" className="hover:text-foreground transition-colors">Suporte</a>
+            <div className="flex items-center gap-8">
+              <Link href="/termos" className="hover:text-accent transition-colors">Termos de Uso</Link>
+              <Link href="/privacidade" className="hover:text-accent transition-colors">Privacidade</Link>
+              <a href="https://wa.me/5585991073789" target="_blank" className="text-accent font-bold hover:underline italic">Falar com Suporte</a>
             </div>
           </div>
         </div>
