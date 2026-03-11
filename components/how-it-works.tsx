@@ -74,16 +74,16 @@ export function HowItWorks() {
         <div className="mt-20 grid md:grid-cols-2 gap-12 items-start">
           <div className="group relative overflow-hidden transition-all duration-500">
             <img
-              src="https://i.imgur.com/AKuffy8.png"
-              alt="Dashboard de Gestão Easy Barbearia"
+              src="https://i.imgur.com/GV3ppVZ.png"
+              alt="Gestão de Equipe e Serviços"
               className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105"
             />
           </div>
 
           <div className="group relative overflow-hidden transition-all duration-500">
             <img
-              src="https://i.imgur.com/GV3ppVZ.png"
-              alt="Gestão de Equipe e Serviços"
+              src="https://i.imgur.com/lY2NcrJ.png"
+              alt="Dashboard de Gestão Easy"
               className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105"
             />
           </div>
