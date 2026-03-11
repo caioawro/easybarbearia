@@ -27,11 +27,10 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-lg border-b border-border"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-background/80 backdrop-blur-lg border-b border-border"
+        : "bg-transparent"
+        }`}
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
@@ -59,7 +58,7 @@ export function Navbar() {
           {/* CTA Button */}
           <div className="hidden lg:block">
             <Button size="lg" className="font-medium" asChild>
-              <Link href="/checkout?plano=gestao">
+              <Link href="#precos">
                 Começar Agora
               </Link>
             </Button>
@@ -90,7 +89,7 @@ export function Navbar() {
                 </a>
               ))}
               <Button className="w-full mt-2 font-medium" asChild>
-                <Link href="/checkout?plano=gestao">Começar Agora</Link>
+                <Link href="#precos">Começar Agora</Link>
               </Button>
             </div>
           </div>

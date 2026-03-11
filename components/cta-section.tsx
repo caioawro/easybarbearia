@@ -26,7 +26,7 @@ export function CTASection() {
               className="bg-accent-foreground text-accent hover:bg-accent-foreground/90 font-medium text-base px-8 h-12"
               asChild
             >
-              <Link href="/checkout?plano=gestao">
+              <Link href="#precos">
                 Começar Agora
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Link>

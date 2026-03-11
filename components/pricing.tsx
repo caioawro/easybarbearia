@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Check } from "lucide-react"
@@ -16,6 +15,7 @@ const plans = [
     description: "Para barbearias iniciantes",
     popular: false,
     videoId: "dQw4w9WgXcQ",
+    checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/QYSQ10ZMF3",
     features: [
       "Site profissional",
       "Gestão de barbeiros",
@@ -36,8 +36,14 @@ const plans = [
     description: "Para barbearias em crescimento",
     popular: true,
     videoId: "dQw4w9WgXcQ",
+    checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/JY56FRZLT6",
     features: [
-      "Tudo do plano anterior, mais:",
+      "Site profissional",
+      "Gestão de barbeiros",
+      "Gestão de serviços",
+      "Combos e planos",
+      "Gestão de produtos",
+      "Configurações básicas",
       "Landing page profissional",
       "Agenda completa",
       "Relatórios",
@@ -58,8 +64,22 @@ const plans = [
     description: "Para redes de barbearias",
     popular: false,
     videoId: "dQw4w9WgXcQ",
+    checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/NLIATW6MYO",
     features: [
+      "Site profissional",
+      "Gestão de barbeiros",
+      "Gestão de serviços",
+      "Combos e planos",
+      "Gestão de produtos",
+      "Configurações básicas",
       "Tudo do plano anterior, mais:",
+      "Landing page profissional",
+      "Agenda completa",
+      "Relatórios",
+      "Financeiro",
+      "CRM de clientes",
+      "Permissões avançadas",
+      "Gestão completa da barbearia",
       "Gestão de múltiplas barbearias",
       "Controle de franquias",
       "Dashboard centralizado",
@@ -85,7 +105,7 @@ export function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto items-start">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -127,7 +147,7 @@ export function Pricing() {
               </div>
 
               {/* Features */}
-              <ul className="space-y-3 mb-8 flex-1">
+              <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <Check className={`w-5 h-5 shrink-0 mt-0.5 ${plan.popular ? "text-accent" : "text-muted-foreground"}`} />
@@ -143,9 +163,9 @@ export function Pricing() {
                 className={`w-full font-medium ${plan.popular ? "bg-accent text-accent-foreground hover:bg-accent/90" : ""}`}
                 asChild
               >
-                <Link href={`/checkout?plano=${plan.id}`}>
+                <a href={plan.checkoutUrl}>
                   {plan.cta}
-                </Link>
+                </a>
               </Button>
             </div>
           ))}

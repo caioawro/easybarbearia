@@ -49,37 +49,40 @@ export function Testimonials() {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-card rounded-2xl border border-border p-6 flex flex-col"
-            >
-              {/* Rating */}
-              <div className="flex gap-1 mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-accent text-accent" />
-                ))}
-              </div>
-
-              {/* Text */}
-              <p className="text-muted-foreground text-sm leading-relaxed flex-1 mb-6">
-                &ldquo;{testimonial.text}&rdquo;
-              </p>
-
-              {/* Author */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-                  <span className="text-accent text-sm font-bold">{testimonial.avatar}</span>
+        {/* Testimonials Infinite Scroll Wrapper */}
+        <div className="relative w-full overflow-hidden mask-fade-edges">
+          <div className="flex animate-scroll hover:[animation-play-state:paused] w-max gap-6 py-4">
+            {/* Double the array for seamless loop */}
+            {[...testimonials, ...testimonials].map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-card rounded-2xl border border-border p-6 flex flex-col w-[300px] sm:w-[350px] shrink-0 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300"
+              >
+                {/* Rating */}
+                <div className="flex gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-accent text-accent" />
+                  ))}
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{testimonial.name}</p>
-                  <p className="text-xs text-muted-foreground">{testimonial.role} • {testimonial.company}</p>
+
+                {/* Text */}
+                <p className="text-muted-foreground text-sm leading-relaxed flex-1 mb-6">
+                  &ldquo;{testimonial.text}&rdquo;
+                </p>
+
+                {/* Author */}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                    <span className="text-accent text-sm font-bold">{testimonial.avatar}</span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{testimonial.name}</p>
+                    <p className="text-xs text-muted-foreground">{testimonial.role} • {testimonial.company}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
