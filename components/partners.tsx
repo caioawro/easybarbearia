@@ -20,16 +20,21 @@ export function Partners() {
           </p>
         </div>
 
-        {/* Logo Grid */}
-        <div className="flex flex-wrap justify-center items-center gap-8 lg:gap-12">
-          {partners.map((partner, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-center px-6 py-3 rounded-lg bg-secondary/50 border border-border/50 hover:border-border transition-colors"
-            >
-              <span className="text-sm font-medium text-muted-foreground">{partner}</span>
-            </div>
-          ))}
+        {/* Infinite Scroll Wrapper */}
+        <div className="relative w-full overflow-hidden mask-fade-edges">
+          <div className="flex animate-scroll hover:[animation-play-state:paused] w-max gap-8 lg:gap-12 py-4">
+            {/* Double the array for seamless loop */}
+            {[...partners, ...partners].map((partner, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center px-8 py-4 rounded-xl bg-secondary/40 border border-border/50 hover:border-accent/40 hover:bg-secondary/60 transition-all duration-300 shadow-sm shrink-0"
+              >
+                <span className="text-sm lg:text-base font-semibold text-muted-foreground group-hover:text-foreground">
+                  {partner}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

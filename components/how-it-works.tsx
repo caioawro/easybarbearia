@@ -45,7 +45,7 @@ export function HowItWorks() {
                 {index < steps.length - 1 && (
                   <div className="hidden md:block absolute top-12 left-[60%] w-full h-px bg-border" />
                 )}
-                
+
                 <div className="relative bg-card rounded-2xl border border-border p-8 text-center">
                   {/* Step number */}
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-sm font-bold px-4 py-1 rounded-full">
@@ -68,6 +68,25 @@ export function HowItWorks() {
               </div>
             )
           })}
+        </div>
+
+        {/* Product Showcase Images */}
+        <div className="mt-20 grid md:grid-cols-2 gap-12 items-start">
+          <div className="group relative overflow-hidden transition-all duration-500">
+            <img
+              src="https://i.imgur.com/AKuffy8.png"
+              alt="Dashboard de Gestão Easy Barbearia"
+              className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+          </div>
+
+          <div className="group relative overflow-hidden transition-all duration-500">
+            <img
+              src="https://i.imgur.com/GV3ppVZ.png"
+              alt="Gestão de Equipe e Serviços"
+              className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+          </div>
         </div>
       </div>
     </section>
