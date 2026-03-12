@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Users, Calendar, TrendingUp, DollarSign } from "lucide-react"
-import { VideoModal } from "./video-modal"
 
 export function Hero() {
   return (
@@ -45,13 +44,16 @@ export function Hero() {
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </Button>
-              <VideoModal
-                triggerText="Ver como funciona"
-                title="Conheça a Easy Barbearia"
-                triggerVariant="outline"
-                triggerSize="lg"
-                triggerClassName="font-medium text-base px-8 h-12"
-              />
+              <Button
+                variant="outline"
+                size="lg"
+                className="font-medium text-base px-8 h-12"
+                asChild
+              >
+                <Link href="#como-funciona">
+                  Ver como funciona
+                </Link>
+              </Button>
             </div>
           </div>
 

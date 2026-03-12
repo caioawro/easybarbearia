@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter"
 });
@@ -38,6 +38,9 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+import { FacebookPixel } from '@/components/facebook-pixel'
+import { Suspense } from 'react'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,6 +49,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <body className={`${inter.variable} font-sans antialiased bg-background text-foreground`}>
+        <Suspense fallback={null}>
+          <FacebookPixel />
+        </Suspense>
         {children}
         <Analytics />
       </body>

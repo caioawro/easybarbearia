@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Check } from "lucide-react"
-import { PlanVideoModal } from "./video-modal"
 
 const plans = [
   {
@@ -14,7 +13,6 @@ const plans = [
     period: "/ mês",
     description: "Para barbearias iniciantes",
     popular: false,
-    videoId: "dQw4w9WgXcQ",
     checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/QYSQ10ZMF3",
     features: [
       "Site profissional",
@@ -35,7 +33,6 @@ const plans = [
     period: "/ mês",
     description: "Para barbearias em crescimento",
     popular: true,
-    videoId: "dQw4w9WgXcQ",
     checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/JY56FRZLT6",
     features: [
       "Site profissional",
@@ -63,7 +60,6 @@ const plans = [
     period: "/ mês",
     description: "Para redes de barbearias",
     popular: false,
-    videoId: "dQw4w9WgXcQ",
     checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/NLIATW6MYO",
     features: [
       "Site profissional",
@@ -139,11 +135,6 @@ export function Pricing() {
                     <span className="text-green-500 ml-2">Economia de {parseInt(plan.originalPrice.replace(/\D/g, '')) - parseInt(plan.price.replace(/\D/g, ''))}%</span>
                   </p>
                 )}
-              </div>
-
-              {/* Video Details Button */}
-              <div className="mb-6">
-                <PlanVideoModal planName={plan.name} videoId={plan.videoId} />
               </div>
 
               {/* Features */}
