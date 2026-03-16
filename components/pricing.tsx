@@ -7,12 +7,12 @@ import { Check } from "lucide-react"
 const plans = [
   {
     id: "site",
-    name: "Site completo",
-    price: "R$ 57",
-    originalPrice: "R$ 97",
+    name: "Starter Pack",
+    price: "R$ 97",
+    originalPrice: "R$ 139",
     period: "/ mês",
-    description: "Para barbearias iniciantes",
-    popular: false,
+    description: "Para barbearias iniciantes. Receba clientes 24 horas por dia através da sua presença digital na sua região e com agendamento virtual.",
+    popular: true,
     checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/QYSQ10ZMF3",
     features: [
       "Site profissional",
@@ -27,11 +27,11 @@ const plans = [
   },
   {
     id: "gestao",
-    name: "Site completo + Plataforma de gestão",
-    price: "R$ 97",
-    originalPrice: "R$ 159",
+    name: "Growth Pack",
+    price: "R$ 197",
+    originalPrice: "R$ 329",
     period: "/ mês",
-    description: "Para barbearias em crescimento",
+    description: "Para barbearias em crescimento. Junto com a sua presença digital, otimize totalmente a gestão da sua barbearia com apenas alguns cliques e diretamente no seu celular.",
     popular: true,
     checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/JY56FRZLT6",
     features: [
@@ -54,11 +54,11 @@ const plans = [
   },
   {
     id: "franquias",
-    name: "Plataforma completa - Multilojas/Franquias",
-    price: "R$ 249",
-    originalPrice: "R$ 399",
+    name: "Enterprise pack",
+    price: "R$ 299",
+    originalPrice: "R$ 599",
     period: "/ mês",
-    description: "Para redes de barbearias",
+    description: "Para redes de barbearias. Gerencie suas lojas e franquias, tudo em um só lugar e com muita praticidade para o melhor desempenho do seu negócio.",
     popular: false,
     checkoutUrl: "https://easy-barbearia.pay.yampi.com.br/r/NLIATW6MYO",
     features: [
@@ -132,7 +132,7 @@ export function Pricing() {
                 {plan.originalPrice && (
                   <p className="text-sm text-muted-foreground mt-1">
                     <span className="line-through">{plan.originalPrice}</span>
-                    <span className="text-green-500 ml-2">Economia de {parseInt(plan.originalPrice.replace(/\D/g, '')) - parseInt(plan.price.replace(/\D/g, ''))}%</span>
+                    <span className="text-green-500 ml-2">Economia de {Math.round(((parseInt(plan.originalPrice.replace(/\D/g, '')) - parseInt(plan.price.replace(/\D/g, ''))) / parseInt(plan.originalPrice.replace(/\D/g, ''))) * 100)}%</span>
                   </p>
                 )}
               </div>
